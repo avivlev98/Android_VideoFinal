@@ -21,7 +21,11 @@
         android:id="@+id/homePage"
         android:name="com.example.videogamecatalog.fragments.HomePage"
         android:label="fragment_home_page"
-        tools:layout="@layout/fragment_home_page" />
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_homePage_to_gameDetail"
+            app:destination="@id/gameDetail" />
+    </fragment>
     <fragment
         android:id="@+id/signupPage"
         android:name="com.example.videogamecatalog.fragments.SignupPage"
