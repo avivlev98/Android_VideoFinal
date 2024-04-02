@@ -95,11 +95,18 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
                 String game1Name = game1.getName();
                 String imageUrl1 = game1.getUrl_picture();
                 String game1Summery = game1.getSummary();
+                String game1releaseDate = game1.getRelease_date();
+                ArrayList<String> game1genre = game1.getGenres();
+                ArrayList<String> game1platform = game1.getPlatforms();
+
                 imageView1.setOnClickListener(v -> {
                     Bundle args = new Bundle();
                     args.putString("game1Name", game1Name);
                     args.putString("imageUrl1", imageUrl1);
                     args.putString("game1Summery", game1Summery);
+                    args.putString("game1releaseDate", game1releaseDate);
+                    args.putStringArrayList("game1genre", game1genre);
+                    args.putStringArrayList("game1platform", game1platform);
                     // Handle click for game1
                     navController.navigate(R.id.action_homePage_to_gameDetail, args);
                 });
@@ -116,11 +123,17 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
                 String game2Name = game2.getName();
                 String imageUrl2 = game2.getUrl_picture();
                 String game2Summery = game2.getSummary();
+                String game2releaseDate = game2.getRelease_date();
+                ArrayList<String> game2genre = game2.getGenres();
+                ArrayList<String> game2platform = game2.getPlatforms();
                 imageView2.setOnClickListener(v -> {
                     Bundle args = new Bundle();
                     args.putString("game1Name", game2Name);
                     args.putString("imageUrl1", imageUrl2);
                     args.putString("game1Summery", game2Summery);
+                    args.putString("game1releaseDate", game2releaseDate);
+                    args.putStringArrayList("game1genre", game2genre);
+                    args.putStringArrayList("game1platform", game2platform);
                     // Handle click for game2
                     navController.navigate(R.id.action_homePage_to_gameDetail, args);
                 });

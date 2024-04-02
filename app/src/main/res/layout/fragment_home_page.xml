@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.HomePage">
@@ -23,7 +24,7 @@
             app:iconifiedByDefault="false"
             app:queryHint="Search..."
             app:searchHintIcon="@null"
-            app:searchIcon="@drawable/search_symb" />
+            app:searchIcon="@drawable/search_symb"/>
 
         <LinearLayout
             android:layout_width="match_parent"
