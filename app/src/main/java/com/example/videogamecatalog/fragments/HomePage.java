@@ -28,6 +28,9 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -160,6 +163,22 @@ public class HomePage extends Fragment {
                 years.add(year);
             }
         }
+        Collections.sort(years, new Comparator<String>() {
+            @Override
+            public int compare(String year1, String year2) {
+                if (year1 == null && year2 == null) {
+                    return 0;
+                } else if (year1 == null) {
+                    return -1;
+                } else if (year2 == null) {
+                    return 1;
+                } else {
+                    int yearInt1 = Integer.parseInt(year1.substring(0, 4));
+                    int yearInt2 = Integer.parseInt(year2.substring(0, 4));
+                    return Integer.compare(yearInt1, yearInt2);
+                }
+            }
+        });
 
         // Ensure that years list does not contain null elements
         yearsList = new ArrayList<>();
@@ -176,16 +195,7 @@ public class HomePage extends Fragment {
         yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // Filter games based on selected year
-                String selectedYear = parentView.getItemAtPosition(position).toString();
-//                String selectedPlatform = platformSpinner.getItemAtPosition(position).toString();
-//                String selectedGenre = genreSpinner.getItemAtPosition(position).toString();
-                if (!selectedYear.equals("All Years")) {
-                    filterByYear(selectedYear); // Filter games based on selected year
-                } else {
-                    // Handle the case when "All Years" is selected (show all games)
-                    adapter.filterList(gameList);
-                }
+                applyFilters(); // Apply filters when year selection changes
             }
 
             @Override
@@ -213,22 +223,7 @@ public class HomePage extends Fragment {
         genreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // Get the selected genre
-                String selectedGenre = parentView.getItemAtPosition(position).toString();
-                // Get the selected year
-                String selectedYear = yearSpinner.getSelectedItem().toString();
-                String selectedPlatform = platformSpinner.getItemAtPosition(position).toString();
-                // Filter games based on selected year and genre
-                if (!selectedYear.equals("All Years") && !selectedGenre.equals("All Genres")) {
-                    filterByYearGenreAndPlatform(selectedYear, selectedGenre, selectedPlatform); // Filter games based on selected year and genre
-                } else if (!selectedYear.equals("All Years")) {
-                    filterByYear(selectedYear); // Filter games based on selected year
-                } else if (!selectedGenre.equals("All Genres")) {
-                    filterByGenre(selectedGenre); // Filter games based on selected genre
-                } else {
-                    adapter.filterList(gameList); // Show all games
-                }
-
+                applyFilters(); // Apply filters when genre selection changes
             }
 
             @Override
@@ -241,7 +236,7 @@ public class HomePage extends Fragment {
     private void setupPlatformSpinner() {
         List<String> platforms = new ArrayList<>();
         platforms.add("All Platforms");
-        // Get unique genres from the game list
+        // Get unique platforms from the game list
         for (Game game : gameList) {
             for (String platform : game.getPlatforms()) {
                 if (!platforms.contains(platform)) {
@@ -256,24 +251,7 @@ public class HomePage extends Fragment {
         platformSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // Get the selected genre
-                String selectedGenre = genreSpinner.getSelectedItem().toString();
-                // Get the selected platform
-                String selectedPlatform = parentView.getItemAtPosition(position).toString();
-                // Get the selected year
-                String selectedYear = yearSpinner.getSelectedItem().toString();
-                // Filter games based on selected year, genre, and platform
-                if (!selectedYear.equals("All Years") && !selectedGenre.equals("All Genres") && !selectedPlatform.equals("All Platforms")) {
-                    filterByYearGenreAndPlatform(selectedYear, selectedGenre, selectedPlatform); // Filter games based on selected year, genre, and platform
-                } else if (!selectedYear.equals("All Years")) {
-                    filterByYear(selectedYear); // Filter games based on selected year
-                } else if (!selectedGenre.equals("All Genres")) {
-                    filterByGenre(selectedGenre); // Filter games based on selected genre
-                } else if (!selectedPlatform.equals("All Platforms")) {
-                    filterByPlatform(selectedPlatform); // Filter games based on selected platform
-                } else {
-                    adapter.filterList(gameList); // Show all games
-                }
+                applyFilters(); // Apply filters when platform selection changes
             }
 
             @Override
@@ -282,6 +260,7 @@ public class HomePage extends Fragment {
             }
         });
     }
+
     // Method to filter games by selected year
     private void filterByYear(String year) {
         filteredList.clear();
@@ -318,25 +297,8 @@ public class HomePage extends Fragment {
         // Update the adapter with the filtered list
         adapter.filterList(filteredList);
     }
-//    private void filterByYearAndGenre(String year, String genre, String platform) {
-//        filteredList.clear();
-//        for (Game game : gameList) {
-//            // Check if the game's genre matches the selected genre
-//            if (game.getGenres() != null && game.getGenres().contains(genre)) {
-//                // Check if the game's release year matches the selected year
-//                if (year.equals("All Years") || game.getRelease_date().startsWith(year)) {
-//                    // Check if the game's platform matches the selected platform
-//                    if (platform.equals("All Platforms") || game.getPlatforms().contains(platform)) {
-//                        filteredList.add(game);
-//                    }
-//                }
-//            }
-//        }
-//        // Update the adapter with the filtered list
-//        adapter.filterList(filteredList);
-//    }
 
-
+    
     private void filterByYearGenreAndPlatform(String year, String genre, String platform) {
         filteredList.clear();
         for (Game game : gameList) {
@@ -365,5 +327,33 @@ public class HomePage extends Fragment {
         // Update the adapter with the filtered list
         adapter.filterList(filteredList);
     }
+
+    private void applyFilters() {
+        String selectedYear = yearSpinner.getSelectedItem().toString();
+        String selectedGenre = genreSpinner.getSelectedItem().toString();
+        String selectedPlatform = platformSpinner.getSelectedItem().toString();
+        String query = searchView.getQuery().toString().toLowerCase();
+
+        List<Game> filteredList = new ArrayList<>();
+
+        for (Game game : gameList) {
+            String releaseDate = game.getRelease_date();
+            if (releaseDate != null) {
+                boolean matchesYear = selectedYear.equals("All Years") || releaseDate.startsWith(selectedYear);
+                boolean matchesGenre = selectedGenre.equals("All Genres") || game.getGenres().contains(selectedGenre);
+                boolean matchesPlatform = selectedPlatform.equals("All Platforms") || game.getPlatforms().contains(selectedPlatform);
+                boolean matchesQuery = query.isEmpty() || game.getName().toLowerCase().contains(query);
+
+                if (matchesYear && matchesGenre && matchesPlatform && matchesQuery) {
+                    filteredList.add(game);
+                }
+            }
+        }
+
+        // Update the adapter with the filtered list
+        adapter.filterList(filteredList);
+    }
+
+
 
 }

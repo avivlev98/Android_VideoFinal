@@ -64,7 +64,9 @@ public class GameDetail extends Fragment {
         genereTextView = view.findViewById(R.id.detailGenre);
         platformTextView = view.findViewById(R.id.detailPlatform);
         descTextView = view.findViewById(R.id.detailDesc);
-        ImageButton backButton = view.findViewById(R.id.backButton);
+        //ImageButton backButton = view.findViewById(R.id.backButton);
+        ImageView backButton = view.findViewById(R.id.backButton);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -15,15 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="16dp"
             tools:context=".DetailActivity">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/backButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/back_arrow_logo"
                 android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
                 android:background="?android:attr/selectableItemBackground"/>
 
             <TextView
@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="162dp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="60dp"
+                android:layout_marginBottom="24dp"
                 android:padding="8dp"
                 android:scaleType="fitCenter" />
 
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="24dp"
                 android:drawableStart="@drawable/calender"
                 android:text="Release Date"
                 android:textColor="@color/black"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="6dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="24dp"
                 android:drawableStart="@drawable/genre_logo"
                 android:text="Genre"
                 android:textColor="@color/black"
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="6dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="24dp"
                 android:drawableStart="@drawable/platform"
                 android:text="Platform"
                 android:textColor="@color/black"
@@ -92,8 +92,7 @@
                 android:text="Description"
                 android:textSize="18sp"
                 android:drawableStart="@drawable/description_logo"
-                android:textColor="@color/black"
-                android:paddingEnd="20dp"/>
+                android:textColor="@color/black"/>
 
         </LinearLayout>
     </ScrollView>
